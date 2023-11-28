@@ -117,9 +117,24 @@ async function run() {
             res.send({ deliveryMan })
         })
 
+        app.get('/users/count', async (req, res) => {
+            const page = parseInt(req.query.page);
+            const size = parseInt(req.query.size);
+    
+            const result = await userCollection.find()
+            .skip(page * size)
+            .limit(size)
+            .toArray();
+            res.send(result);
+          })
+
         app.get('/users', async(req,res)=>{
             const result = await userCollection.find().toArray();
             res.send(result);
+        })
+        app.get('/usersCount', async(req,res)=>{
+            const count = await userCollection.estimatedDocumentCount();
+            res.send({count});
         })
 
 
@@ -154,6 +169,8 @@ async function run() {
             const result = await userCollection.find(query).toArray();
             res.send(result)
         })
+
+    
 
         app.post('/users', async (req, res) => {
             const user = req.body;
