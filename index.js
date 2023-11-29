@@ -109,12 +109,12 @@ async function run() {
                 return res.status(403).send({ message: 'forbiden access' })
             }
             const query = { email: email };
-            const user = await userCollection.findOne(query);
+            const userMan = await userCollection.findOne(query);
             let deliveryMan = false;
-            if (user) {
-                deliveryMan = user.role === 'Delivery Man';
+            if (userMan) {
+                deliveryMan = userMan.role === 'Delivery Man';
             }
-            res.send({ deliveryMan })
+            res.send({ deliveryMan})
         })
 
         app.get('/users/count', async (req, res) => {
@@ -169,6 +169,12 @@ async function run() {
             const result = await userCollection.find(query).toArray();
             res.send(result)
         })
+        app.get('/users/delimeryman/:email', async(req,res)=>{
+            const email = req.params.email;
+            const query = {email: email};
+            const result = await userCollection.findOne(query);
+            res.send(result);
+        })
 
     
 
@@ -189,6 +195,12 @@ async function run() {
             res.send(result);
         })
 
+        app.get('/parcelbooks/deliveryList/:id', async(req,res)=>{
+            const id = req.params.id;
+            const query = {deliveryManID: id};
+            const result = await parcelBookCollection.find(query).toArray();
+            res.send(result);
+        })
         app.get('/parcelBooks', async(req,res)=>{
             const result = await parcelBookCollection.find().toArray();
             res.send(result);
@@ -227,6 +239,18 @@ async function run() {
             const updateStatus = {
                 $set: {
                     status: "Cancel"
+                }
+            }
+            const result = await parcelBookCollection.updateOne(query,  updateStatus);
+            res.send(result);
+        })
+        
+        app.patch('/parcelbooks/statusUpdate/delivery/:id', async(req,res)=>{
+            const id = req.params.id;
+            const query = {_id: new ObjectId(id)};
+            const updateStatus = {
+                $set: {
+                    status: "Delivered"
                 }
             }
             const result = await parcelBookCollection.updateOne(query,  updateStatus);
