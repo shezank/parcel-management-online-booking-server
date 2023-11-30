@@ -6,18 +6,11 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 
-const corsConfig = {
-    origin: [
-        'http://localhost:5173',
-        'https://trust-line-parcel.web.app',
-        'https://trust-line-parcel.firebaseapp.com'
 
-    ],
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE']
-  }
-app.use(cors(corsConfig));
-app.use(cors());
+app.use(cors({
+    origin: ['http://localhost:5173', 'https://trust-line-parcel.web.app', 'https://trust-line-parcel.firebaseapp.com'],
+    credentials: true
+}));
 app.use(express.json());
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
@@ -215,7 +208,7 @@ async function run() {
             res.send(result);
         })
        
-        app.patch('/parcelbooks/:id', verifyToken, async(req,res)=>{
+        app.patch('/parcelbooks/:id', verifyToken, verifyAdmin, async(req,res)=>{
             const parcel = req.body;
             const id = req.params.id;
             const query = {_id: new ObjectId(id)};
