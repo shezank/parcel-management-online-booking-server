@@ -6,17 +6,17 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 
-// const corsConfig = {
-//     origin: [
-//         'http://localhost:5173',
-//         'https://trust-line-parcel.web.app',
-//         'https://trust-line-parcel.firebaseapp.com'
+const corsConfig = {
+    origin: [
+        'http://localhost:5173',
+        'https://trust-line-parcel.web.app',
+        'https://trust-line-parcel.firebaseapp.com'
 
-//     ],
-//     credentials: true,
-//     methods: ['GET', 'POST', 'PUT', 'DELETE']
-//   }
-// app.use(cors(corsConfig));
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+  }
+app.use(cors(corsConfig));
 app.use(cors());
 app.use(express.json());
 
@@ -35,7 +35,7 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
 
         const userCollection = client.db("TrustLine").collection("users");
         const parcelBookCollection = client.db("TrustLine").collection("parcelBooks");
@@ -294,8 +294,8 @@ async function run() {
             res.send(result);
         })
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+        // await client.db("admin").command({ ping: 1 });
+        // console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
         // await client.close();
