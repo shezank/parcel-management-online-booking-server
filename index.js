@@ -171,7 +171,7 @@ async function run() {
             const result = await userCollection.find(query).toArray();
             res.send(result)
         })
-        app.get('/users/delimeryman/:email', verifyToken, async(req,res)=>{
+        app.get('/users/delimeryman/:email', async(req,res)=>{
             const email = req.params.email;
             const query = {email: email};
             const result = await userCollection.findOne(query);
