@@ -128,7 +128,7 @@ async function run() {
             res.send(result);
           })
 
-        app.get('/users', async(req,res)=>{
+        app.get('/users', verifyToken, verifyAdmin, async(req,res)=>{
             const result = await userCollection.find().toArray();
             res.send(result);
         })
@@ -160,7 +160,7 @@ async function run() {
             res.send(result);
         })
 
-        app.patch('/users/deliveryman/:id', async (req, res) => {
+        app.patch('/users/deliveryman/:id', verifyToken, async (req, res) => {
             const id = req.params.id;
             const filter = { _id: new ObjectId(id) };
             const updateDoc = {
@@ -172,13 +172,13 @@ async function run() {
             res.send(result);
         })
 
-        app.get('/users/:deliveryman', async(req,res)=>{
+        app.get('/users/:deliveryman', verifyToken, async(req,res)=>{
             const deliveryMan = req.params.deliveryman;
             const query = {role: deliveryMan};
             const result = await userCollection.find(query).toArray();
             res.send(result)
         })
-        app.get('/users/delimeryman/:email', async(req,res)=>{
+        app.get('/users/delimeryman/:email', verifyToken, async(req,res)=>{
             const email = req.params.email;
             const query = {email: email};
             const result = await userCollection.findOne(query);
@@ -198,7 +198,7 @@ async function run() {
             res.send(result)
         })
 
-        app.post('/parcelBooks', async(req,res)=>{
+        app.post('/parcelBooks', verifyToken, async(req,res)=>{
             const parcel = req.body;
             const result = await parcelBookCollection.insertOne(parcel);
             res.send(result);
@@ -210,12 +210,12 @@ async function run() {
             const result = await parcelBookCollection.find(query).toArray();
             res.send(result);
         })
-        app.get('/parcelBooks', async(req,res)=>{
+        app.get('/parcelBooks',verifyToken, async(req,res)=>{
             const result = await parcelBookCollection.find().toArray();
             res.send(result);
         })
        
-        app.patch('/parcelbooks/:id', async(req,res)=>{
+        app.patch('/parcelbooks/:id', verifyToken, async(req,res)=>{
             const parcel = req.body;
             const id = req.params.id;
             const query = {_id: new ObjectId(id)};
@@ -242,7 +242,7 @@ async function run() {
 
         })
 
-        app.patch('/parcelbooks/statusUpdate/:id', async(req,res)=>{
+        app.patch('/parcelbooks/statusUpdate/:id', verifyToken, async(req,res)=>{
             const id = req.params.id;
             const query = {_id: new ObjectId(id)};
             const updateStatus = {
@@ -254,7 +254,7 @@ async function run() {
             res.send(result);
         })
         
-        app.patch('/parcelbooks/statusUpdate/delivery/:id', async(req,res)=>{
+        app.patch('/parcelbooks/statusUpdate/delivery/:id', verifyToken, async(req,res)=>{
             const id = req.params.id;
             const query = {_id: new ObjectId(id)};
             const updateStatus = {
@@ -266,20 +266,20 @@ async function run() {
             res.send(result);
         })
         
-        app.get('/parcelBooks/:email', async(req,res)=>{
+        app.get('/parcelBooks/:email', verifyToken, async(req,res)=>{
             const email = req.params.email;
             const query = {email: email}
             const result = await parcelBookCollection.find(query).toArray();
             res.send(result);
         })
-        app.get('/parcelBooks/update/:id', async(req,res)=>{
+        app.get('/parcelBooks/update/:id', verifyToken, async(req,res)=>{
             const id = req.params.id;
             const query = {_id: new ObjectId(id)}
             const result = await parcelBookCollection.findOne(query);
             res.send(result);
         })
 
-        app.patch('/parcelBooks/assign/:id', async(req,res)=>{
+        app.patch('/parcelBooks/assign/:id', verifyToken, async(req,res)=>{
             const id = req.params.id;
             const assign = req.body;
             const query = {_id: new ObjectId(id)};
