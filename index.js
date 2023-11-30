@@ -137,6 +137,15 @@ async function run() {
             res.send({count});
         })
 
+        app.get('/Countall', async(req,res)=>{
+            const usersCount = await userCollection.estimatedDocumentCount();
+            const bookingsCount = await parcelBookCollection.estimatedDocumentCount();
+            const filter = {status: 'Delivered'};
+            const delivery = await parcelBookCollection.find(filter).toArray();
+            const deliveryCount = delivery.length;
+            res.send({usersCount, bookingsCount, deliveryCount});
+        })
+
 
 
         app.patch('/users/admin/:id', verifyToken, verifyAdmin, async (req, res) => {
